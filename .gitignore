@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+users.csv
+my_secrets.py
