@@ -17,8 +17,14 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.exceptions import TelegramBadRequest
 
-from config import WELCOME_MESSAGE, USER_TOPICS, TOPIC_USERS, add_user_thread_mapping
-from my_secrets import TELEGRAM_SUPPORT_CHAT_ID
+from config import (
+    WELCOME_MESSAGE,
+    USER_TOPICS,
+    TOPIC_USERS,
+    add_user_thread_mapping,
+    reset_mappings,
+)
+from my_secrets import TELEGRAM_SUPPORT_CHAT_ID, ADMIN_IDS
 from storage import (
     add_duty,
     close_ticket,
@@ -456,10 +462,11 @@ async def duty_me_off(message: Message):
 async def reset_stats_cmd(message: Message):
     if message.chat.id != TELEGRAM_SUPPORT_CHAT_ID:
         return
-    if message.from_user.id != 247880158:
+    if message.from_user.id not in ADMIN_IDS:
         await message.reply("Эта команда доступна только администратору.")
         return
     reset_stats()
+    reset_mappings()
     await message.reply("Статистика и заявки обнулены.")
 
 
@@ -468,7 +475,7 @@ async def reset_stats_cmd(message: Message):
 async def purge_topics(message: Message, bot: Bot):
     if message.chat.id != TELEGRAM_SUPPORT_CHAT_ID:
         return
-    if message.from_user.id != 247880158:
+    if message.from_user.id not in ADMIN_IDS:
         await message.reply("Эта команда доступна только администратору.")
         return
     stats_topic = get_setting("stats_topic_id")
@@ -488,6 +495,7 @@ async def purge_topics(message: Message, bot: Bot):
             logging.exception("Не удалось удалить тред %s", topic_id)
     # Чистим заявки после удаления тредов
     reset_stats()
+    reset_mappings()
     await message.reply(
         f"Удалено тредов: {deleted}. Ошибок: {failed}. "
         f"Статистический тред сохранён. Заявки/статистика обнулены."

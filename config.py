@@ -13,5 +13,10 @@ def add_user_thread_mapping(user_id: int, thread_id: int):
     TOPIC_USERS[thread_id] = user_id
 
 
+def reset_mappings():
+    USER_TOPICS.clear()
+    TOPIC_USERS.clear()
+
+
 # Команды, показываемые пользователю
 commands = []
