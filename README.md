@@ -34,6 +34,4 @@ TELEGRAM_SUPPORT_CHAT_ID=-100xxxxxxxxxx
 
 Forked from https://github.com/jahma48/itsupportbot4habr (автор: @jahma48). Доработки описаны выше.
 
-## Лицензия
 
-Сохраняйте лицензию исходного проекта (MIT, если иное не указано в оригинале).
